@@ -43,9 +43,8 @@ let QJS6Tools = {
         constructor(classCss) {
             this.element = document.querySelectorAll(classCss);
             this.callback = (event) =>{
-                
+            
             }
-
             this.removeAnimation = new Map();
             let parent =  this;
             this.element.forEach((object) => {
@@ -63,90 +62,58 @@ let QJS6Tools = {
         }
     },
     Event: class{
-        constructor(element){
+        constructor(){
             this.buffer = [];
             let self = this;
-            this.element = element;
-            this.animName = "dqsoihdoqhd";
+            this.func = () => {
+
+            }
             document.addEventListener("animationend",(event) => {
-                for(let i = 0; i < self.element.length;i++){
-                    self.func(self.element[i]);
-                }
+                self.buffer.forEach((value) => {
+                    if(event.animationName == value.animation){
+                        value.callback(event.target);
+                    }
+                })
             })
             this.applyAfter = (animationName,call) => {
-                buffer.add(animationName,call);
-            }
-        }
-    },
-    Mixin: class{
-        constructor(){
-            this.parentInherit = new Map();
-            this.addElement = (...mixin) => {
-                let self = this;
-                mixin.forEach((value) => {
-                    let data = new Map();
-                    for(let property in value){
-                        data.set(value[property],property)
-                    }
-                    self.parentInherit.set(data,value.constructor.name);
-                })    
-            }
-
-            this.getParent = (name) => {
-                let val;
-                this.parentInherit.forEach((key,value) => {
-                    if(name == key){
-                        val = value;
-                        this.listProperty(value);
-                    }
-                })
-                return val;
-            }
-
-            this.getFrom = (parent,name) => {
-                let val;
-                parent.forEach((key,value) => {
-                    if(key == name){
-                        val = value;
-                    }
-                })
-                return val
-            }
-            this.listProperty = (parent) => {
-                parent.forEach((key,value) => {
-                    console.log(key);
-                    console.log(typeof(value));
-                })
+                this.buffer.push({
+                    animation:animationName,
+                    callback: call
+                });
             }
         }
     }
 }
 let QJS6 = {
     Animation: {
-        Fader: class extends QJS6Tools.Mixin{
+        Fader: class extends QJS6Tools.AnimationBase{
             constructor() {
-                super();
-                this.addElement(new QJS6Tools.Event,new QJS6Tools.AnimationBase);
-                this.event = this.getParent("Event");
-                this.animation = this.getParent("AnimationBase");
+                super(".fade");
+                this.event = new QJS6Tools.Event();
+                this.applyAfterFade("in",(element) => {
+                    if(element.classList.contains("fade")){
+                        element.classList.remove("fade");
+                    }
+                    element.classList.remove("fadeIn");
+                })
 
-                let name = this.getFrom(this.event,"animName");
-                let func = this.getFrom(this.animation,"addAnimation");
-                
-                
+                this.applyAfterFade("out",(element) => {
+                    element.classList.remove("fadeOut");
+                })
 
-                this.fromEvent = (variable) => {
-                    return this.getFrom(this.event,variable);
-                }
-                this.fromAnimation = (variable) => {
-                    return this.getFrom(this.animation,variable)
+            }
+            fadeElement(option) {
+                if(option == "in"){
+                    this.addAnimation("fadeIn")
+                }else if(option == "out"){
+                    this.addAnimation("fadeOut");
                 }
             }
-            fadeElmeent(option) {
-                if(option == "in"){
-                    event("fadeIn")
-                }else if(option == "out"){
-                    event("fadeOut");
+            applyAfterFade(mode,func){
+                if(mode == "in"){
+                    this.event.applyAfter("fadeIn",func);
+                }else if(mode == "out"){
+                    this.event.applyAfter("fadeOut",func);
                 }
             }
         }
@@ -189,7 +156,11 @@ let QJS6 = {
                 this.bufferObj = new Map();
                 let parent = this;
                 this.called = 0;
+                this.beforeCall = () => {
+
+                }
                 this.success = (obj) => {
+                    this.beforeCall();
                     parent.bufferObj.forEach((key,value) => {
                         value.function(obj[key],value.target);
                     })
