@@ -82,14 +82,15 @@ let QJS6Tools = {
                 
             }
 
+            this.formatedCss = classCss.substring(1,classCss.length);
             this.add = (element) => {
-                if(!element.classList.contains(classCss)){
-                    element.classList.add(classCss);
+                if(!element.classList.contains(formatedCss)){
+                    element.classList.add(formatedCss);
                 }
             }
             this.remove = (element) => {
-                if(element.classList.contains(classCss)){
-                    element.classList.remove(classCss);
+                if(element.classList.contains(formatedCss)){
+                    element.classList.remove(formatedCss);
                 }
             }
             this.bufferAnim = new Map();
@@ -99,7 +100,6 @@ let QJS6Tools = {
                     parent.checkApplyAfter(this);
                 })
             })
-            this
         }
         checkApplyAfter(element) {
             this.bufferAnim.forEach((animName,call) => {
