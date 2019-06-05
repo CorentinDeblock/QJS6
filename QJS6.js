@@ -83,13 +83,13 @@ let QJS6Tools = {
             }
 
             this.add = (element) => {
-                if(!element.classList.contains("fade")){
-                    element.classList.add("fade");
+                if(!element.classList.contains(classCss)){
+                    element.classList.add(classCss);
                 }
             }
             this.remove = (element) => {
-                if(element.classList.contains("fade")){
-                    element.classList.remove("fade");
+                if(element.classList.contains(classCss)){
+                    element.classList.remove(classCss);
                 }
             }
             this.bufferAnim = new Map();
