@@ -84,13 +84,13 @@ let QJS6Tools = {
 
             this.formatedCss = classCss.substring(1,classCss.length);
             this.add = (element) => {
-                if(!element.classList.contains(formatedCss)){
-                    element.classList.add(formatedCss);
+                if(!element.classList.contains(this.formatedCss)){
+                    element.classList.add(this.formatedCss);
                 }
             }
             this.remove = (element) => {
-                if(element.classList.contains(formatedCss)){
-                    element.classList.remove(formatedCss);
+                if(element.classList.contains(this.formatedCss)){
+                    element.classList.remove(this.formatedCss);
                 }
             }
             this.bufferAnim = new Map();
